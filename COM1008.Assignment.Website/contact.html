@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="Author" content="Zahra alhilal">
+    <meta name="description" content="Contact information page">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CSS/index.css"> <!--MAIN CSS-->
+    <script src="JS/script.js" defer></script> <!--MAIN SCRIPT-->
+    <title>Contact information</title>
+</head>
+
+<body>
+   <!--THE MENU BAR STRUCTURE-->
+    <nav class="navbar">
+        <div class="logo">ZAHRA HASAN</div>
+        <div class="menubar">
+            <a href="#" class="menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+            </a>
+        </div>
+        <div class="links">
+          <ul>
+          <li><a href="index.html">HOME</a></li>
+          <li><a href="Degreeinfo.html">DEGREE</a></li>
+          <li><a href="DataVisualisation.html">VISUALISATION</a></li>
+          <li><a href="quiz.html">QUIZ!</a></li>
+          <li><a href="contact.html">CONTACT ME</a></li>
+          <li><a href="accessibility.html">ACCESSABILITY</a></li>
+         </ul>
+      </div> 
+    </nav>
+
+    
+    <!--ONE SECTION OF THE PAGE-CONTACT INFOTMATION-->
+    <section class="contact">
+        <div class="contactinfo">
+        <h1>my contact information </h1>
+        <p id="adress">Email: Zalhilal1@sheffield.ac.uk <br>
+            adress: Department of Computer Science <br>
+            The University of Sheffield <br>
+            Regent Court <br>
+            211 Portobello <br>
+            Sheffield <br>
+            S1 4DP <br>
+            UK
+        </p>
+        </div>
+        <div id="feedbackcontainer">
+            <!--THE FORM-->
+            <form name="feedbackForm" action="https://www.dcs.shef.ac.uk/cgi-intranet/public/FormMail.php" method="POST">
+                <p>send me your feedback</p>
+                <input type="hidden" name="recipients" value="zalhilal1@sheffield.ac.uk">
+                    <p>
+                        <label for="email">Your e-mail</label>
+                        <input type="email" name="email" id="email" placeholder="Type your email please"
+                                maxlength="40" size="20" required>
+                    </p>
+                    <p>
+                        <textarea name="feedback" cols="30" rows="5" required placeholder="type your feedback here please..."></textarea>
+                    </p>
+                    <p>
+                        <input type="submit" name="submit" id="submit"
+                            value="Submit">
+                    </p>
+            </form> 
+        </div>
+    </section>
+    
+
+     <!--End of page Footer-->
+     <footer>
+        <p>&copy;ZAHRA HASAN   <a href="accessibility.html" id="accessibility">Accessibility</a></p>
+    </footer>
+</body>
+</html>

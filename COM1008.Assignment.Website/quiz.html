@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="Author" content="Zahra alhilal">
+    <meta name="description" content="Quiz page">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CSS/index.css"> <!--MAIN CSS-->
+    <script src="JS/script.js" defer></script> <!--MAIN SCRIPT-->
+    <title>Quiz</title>
+</head>
+
+<body>
+    <!--THE MENU BAR STRUCTURE-->
+    <nav class="navbar">
+        <div class="logo">ZAHRA HASAN</div>
+        <div class="menubar">
+            <a href="#" class="menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+            </a>
+        </div>
+        <div class="links">
+          <ul>
+          <li><a href="index.html">HOME</a></li>
+          <li><a href="Degreeinfo.html">DEGREE</a></li>
+          <li><a href="DataVisualisation.html">VISUALISATION</a></li>
+          <li><a href="quiz.html">QUIZ!</a></li>
+          <li><a href="contact.html">CONTACT ME</a></li>
+          <li><a href="accessibility.html">ACCESSABILITY</a></li>
+         </ul>
+      </div> 
+    </nav>
+
+    <!--QUIZ IN A FORM STRUCTURE-->
+    <form name="quizForm" id="quizForm">
+        <label>As a computer scince student</label>
+        <div class="questions">
+            <p>1- In which subject do you interacte with the website shown in the picture?  </p>
+            <img src="images/Mirocloud.png" alt="quiz image">
+            <p><input type="radio" name="Q1" value="M&I">A. Machines And Intelligence</p>
+            <p><input type="radio" name="Q1" value="CS">B. Foundations Of Computer Science</p>
+            <p><input type="radio" name="Q1" value="M&I">C. Web and Internet Technology</p>
+        </div>
+        <div class="questions">
+            <p>2- What is the name of the programming language used in the picture below?  </p>
+            <img src="images/Rb.png" alt="quiz image">
+            <p><input type="radio" name="Q2" value="JS">A. JavaScript</p>
+            <p><input type="radio" name="Q2" value="PY">B. Python</p>
+            <p><input type="radio" name="Q2" value="RB">C. Ruby</p>
+        </div>
+        <div class="questions">
+            <p>3- What picture shows the text editor application visual code icon?  </p>
+            <p><input type="radio" name="Q3" value="VC">A. <br> <img src="images/Vscode.png" alt="quiz image"></p>
+            <p><input type="radio" name="Q3" value="Pc">B. <br> <img src="images/picsart.jpg" alt="quiz image"></p>
+            <p><input type="radio" name="Q3" value="Du">C. <br> <img src="images/duolingo.png" alt="quiz image"></p>
+        </div>
+    </form>
+    <p id="result"></p> <!--EMPTY P TO PUSH RESULT-->
+    <div id="done">
+        <button id="button" onclick="quiz()">Im done</button>
+        <script src="JS/quiz.js"></script> <!--THE QUIZ SCRIPT-->
+    </div> 
+
+    <!--End of page Footer-->
+    <footer>
+        <p>&copy;ZAHRA HASAN   <a href="accessibility.html" id="accessibility">Accessibility</a></p>
+    </footer> 
+</body>
+</html>
