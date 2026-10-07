@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Icon from '../components/Icon.astro';
 import { site } from '../site.config';
 import { EMBED_FRAME_ORIGINS } from '../lib/safe-url';
+import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 
 interface Props {
   title?: string;
@@ -52,6 +53,7 @@ const year = new Date().getFullYear();
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" title={`${site.name} — Writing`} href="/rss.xml" />
     <meta name="color-scheme" content="light dark" />
@@ -125,9 +127,7 @@ const year = new Date().getFullYear();
 
   .site-header {
     position: sticky; top: 0; z-index: 50;
-    background: color-mix(in srgb, var(--bg) 82%, transparent);
-    backdrop-filter: saturate(180%) blur(14px);
-    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    background: color-mix(in srgb, var(--bg) 96%, transparent);
     border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
   }
   .bar { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 12px; }
