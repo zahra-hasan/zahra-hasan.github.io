@@ -53,7 +53,8 @@ become link cards. Child pages, linked databases and @-mentions of people are ne
 ## One-time setup
 
 1. **Create a Notion integration**: <https://www.notion.so/profile/integrations> → *New integration*
-   → type *Internal*, capabilities: **Read content** only. Copy the secret.
+   → type *Internal*. Copy the secret. Capabilities: **Read content**, plus **Insert content**
+   *temporarily* for step 3. Untick it afterwards; syncing only needs read access.
 2. **Pick a home for the database**: create a page in Notion (e.g. "Website"), then on that page
    ••• → *Connections* → add your integration.
 3. **Create the database** (or build it by hand from the table above):
