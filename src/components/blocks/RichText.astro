@@ -1,0 +1,24 @@
+---
+import type { RichText } from '../../lib/model';
+import { safeHref } from '../../lib/safe-url';
+
+interface Props { text: RichText[] }
+const { text } = Astro.props;
+
+// Every span is rendered as escaped text — Notion content never becomes raw HTML.
+function classes(t: RichText): string | undefined {
+  const c = [
+    t.bold && 'b', t.italic && 'i', t.strike && 's', t.underline && 'u',
+    t.color && t.color !== 'default' && (t.highlight ? `hl-${t.color}` : `c-${t.color}`),
+  ].filter(Boolean);
+  return c.length ? c.join(' ') : undefined;
+}
+---
+{text.map((t) => {
+  const href = safeHref(t.href);
+  const external = href && /^https?:/.test(href);
+  const inner = t.code ? <code class={classes(t)}>{t.text}</code> : classes(t) ? <span class={classes(t)}>{t.text}</span> : t.text;
+  return href
+    ? <a href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>{inner}</a>
+    : inner;
+})}

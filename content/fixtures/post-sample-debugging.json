@@ -1,0 +1,23 @@
+{
+  "summary": "Placeholder for a technical deep-dive — the bug, the investigation, the fix, the lesson.",
+  "updated": "2026-10-07T12:00:00.000Z",
+  "tags": [
+    "Debugging",
+    "TypeScript"
+  ],
+  "featured": false,
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": [
+        {
+          "text": "Technical write-ups make great LinkedIn posts: concrete problem, clear reasoning, honest lessons."
+        }
+      ]
+    }
+  ],
+  "kind": "post",
+  "slug": "sample-debugging-story",
+  "title": "Sample: a debugging story",
+  "date": "2026-08-30"
+}

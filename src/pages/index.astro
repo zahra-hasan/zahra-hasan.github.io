@@ -1,0 +1,112 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import PostItem from '../components/PostItem.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Timeline from '../components/Timeline.astro';
+import { site } from '../site.config';
+import { entriesOf, projectsForShowcase } from '../lib/entries';
+
+const posts = (await entriesOf('post')).slice(0, 4);
+const projects = (await projectsForShowcase()).slice(0, 3);
+const milestones = (await entriesOf('milestone')).slice(0, 4);
+const firstName = site.name.split(' ')[0];
+---
+<Base>
+  <section class="hero">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <p class="eyebrow hello"><span class="pulse" aria-hidden="true"></span> {site.role}</p>
+      <h1>Hi, I’m {firstName}.<br /><span class="soft">{site.headline}</span></h1>
+      <p class="intro">{site.intro}</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="/writing/">Read my writing <Icon name="arrow" /></a>
+        <a class="btn" href="/projects/">See projects</a>
+        {site.links.linkedin && <a class="btn icon-btn" href={site.links.linkedin} target="_blank" rel="me noopener" aria-label="LinkedIn"><Icon name="linkedin" /></a>}
+        {site.links.github && <a class="btn icon-btn" href={site.links.github} target="_blank" rel="me noopener" aria-label="GitHub"><Icon name="github" /></a>}
+      </div>
+    </div>
+  </section>
+
+  {projects.length > 0 && (
+    <section class="section container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Selected work</p>
+          <h2>Projects</h2>
+        </div>
+        <a href="/projects/">All projects →</a>
+      </div>
+      <div class="grid">
+        {projects.map((p) => <ProjectCard entry={p} />)}
+      </div>
+    </section>
+  )}
+
+  <section class="section container split">
+    <div>
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Notes from the field</p>
+          <h2>Latest writing</h2>
+        </div>
+        {posts.length > 0 && <a href="/writing/">All writing →</a>}
+      </div>
+      {posts.length > 0
+        ? <div class="posts">{posts.map((p) => <PostItem entry={p} />)}</div>
+        : <p class="empty">First posts are on their way.</p>}
+    </div>
+
+    {milestones.length > 0 && (
+      <aside class="journey">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">The journey</p>
+            <h2>Milestones</h2>
+          </div>
+        </div>
+        <div class="journey-card">
+          <Timeline milestones={milestones} />
+          <a class="more" href="/about/#journey">Full story →</a>
+        </div>
+      </aside>
+    )}
+  </section>
+</Base>
+
+<style>
+  .hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+  .glow {
+    position: absolute; inset: -40% -10% auto auto; width: 900px; height: 700px; pointer-events: none;
+    background:
+      radial-gradient(closest-side, var(--glow-1), transparent),
+      radial-gradient(closest-side at 30% 70%, var(--glow-2), transparent);
+    opacity: 0.7; filter: blur(30px);
+  }
+  .hero::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image: radial-gradient(color-mix(in srgb, var(--ink) 10%, transparent) 1px, transparent 1px);
+    background-size: 22px 22px;
+    mask-image: linear-gradient(to bottom, black, transparent 85%);
+    -webkit-mask-image: linear-gradient(to bottom, black, transparent 85%);
+  }
+  .hero-inner { position: relative; z-index: 1; padding-block: clamp(64px, 12vw, 136px) clamp(56px, 9vw, 104px); }
+  .hello { display: inline-flex; align-items: center; gap: 10px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: color-mix(in srgb, var(--surface) 70%, transparent); text-transform: none; letter-spacing: 0.01em; font-size: 13px; color: var(--ink-2); }
+  .pulse { width: 8px; height: 8px; border-radius: 999px; background: #22c55e; box-shadow: 0 0 0 4px rgb(34 197 94 / 0.18); }
+  h1 { margin-top: 26px; font-size: clamp(40px, 7.4vw, 76px); line-height: 1.02; letter-spacing: -0.045em; font-weight: 720; max-width: 15ch; }
+  .soft { color: var(--ink-3); }
+  .intro { margin: 26px 0 0; max-width: 58ch; font-size: clamp(17px, 2vw, 19.5px); color: var(--ink-2); line-height: 1.6; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 34px; }
+  .icon-btn { width: 42px; padding: 0; justify-content: center; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 20px; }
+
+  .split { display: grid; grid-template-columns: minmax(0, 1fr); gap: 56px; padding-top: 8px; }
+  @media (min-width: 900px) {
+    .split:has(.journey) { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); }
+  }
+  .posts > :global(.post:last-child) { border-bottom: 1px solid var(--line); }
+  .empty { color: var(--ink-3); }
+  .journey-card { padding: 24px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .more { display: inline-block; margin-top: 22px; font-size: 15px; color: var(--ink-2); }
+</style>

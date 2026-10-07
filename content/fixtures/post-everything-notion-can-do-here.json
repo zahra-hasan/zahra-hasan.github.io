@@ -1,0 +1,397 @@
+{
+  "summary": "A preview of how Notion blocks look on this site — callouts, tables, toggles, code, embeds and more.",
+  "updated": "2026-10-07T12:00:00.000Z",
+  "tags": [
+    "Meta",
+    "Notion"
+  ],
+  "featured": false,
+  "blocks": [
+    {
+      "type": "toc"
+    },
+    {
+      "type": "paragraph",
+      "text": [
+        {
+          "text": "This is "
+        },
+        {
+          "text": "sample content",
+          "bold": true
+        },
+        {
+          "text": " that only appears in local preview. Once Notion is connected, your own posts replace it. Text can be "
+        },
+        {
+          "text": "italic",
+          "italic": true
+        },
+        {
+          "text": ", "
+        },
+        {
+          "text": "coloured",
+          "color": "purple"
+        },
+        {
+          "text": ", "
+        },
+        {
+          "text": "highlighted",
+          "color": "yellow",
+          "highlight": true
+        },
+        {
+          "text": ", "
+        },
+        {
+          "text": "inline code",
+          "code": true
+        },
+        {
+          "text": " or a "
+        },
+        {
+          "text": "link",
+          "href": "https://developers.notion.com/"
+        },
+        {
+          "text": "."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "icon": "💡",
+      "color": "blue",
+      "text": [
+        {
+          "text": "Callouts keep their emoji and colour. Great for key takeaways from a customer engagement."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": [
+        {
+          "text": "Lists and to-dos"
+        }
+      ],
+      "anchor": "lists-and-to-dos"
+    },
+    {
+      "type": "bulleted_list",
+      "items": [
+        {
+          "text": [
+            {
+              "text": "Bulleted lists"
+            }
+          ],
+          "children": []
+        },
+        {
+          "text": [
+            {
+              "text": "with nested items"
+            }
+          ],
+          "children": [
+            {
+              "type": "bulleted_list",
+              "items": [
+                {
+                  "text": [
+                    {
+                      "text": "like this one"
+                    }
+                  ],
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "numbered_list",
+      "items": [
+        {
+          "text": [
+            {
+              "text": "Understand the customer’s problem"
+            }
+          ],
+          "children": []
+        },
+        {
+          "text": [
+            {
+              "text": "Prototype quickly"
+            }
+          ],
+          "children": []
+        },
+        {
+          "text": [
+            {
+              "text": "Ship, measure, iterate"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "type": "todo_list",
+      "items": [
+        {
+          "text": [
+            {
+              "text": "Set up the Notion integration"
+            }
+          ],
+          "checked": true,
+          "children": []
+        },
+        {
+          "text": [
+            {
+              "text": "Publish the first real post"
+            }
+          ],
+          "checked": false,
+          "children": []
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": [
+        {
+          "text": "Tables"
+        }
+      ],
+      "anchor": "tables"
+    },
+    {
+      "type": "table",
+      "columnHeader": true,
+      "rowHeader": false,
+      "rows": [
+        [
+          [
+            {
+              "text": "Area"
+            }
+          ],
+          [
+            {
+              "text": "What I’m learning"
+            }
+          ],
+          [
+            {
+              "text": "Confidence"
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "text": "Discovery"
+            }
+          ],
+          [
+            {
+              "text": "Turning vague asks into scoped problems"
+            }
+          ],
+          [
+            {
+              "text": "Growing",
+              "color": "orange"
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "text": "Integration"
+            }
+          ],
+          [
+            {
+              "text": "APIs, auth, data pipelines in customer environments"
+            }
+          ],
+          [
+            {
+              "text": "Solid",
+              "color": "green"
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "text": "Communication"
+            }
+          ],
+          [
+            {
+              "text": "Explaining trade-offs to non-engineers"
+            }
+          ],
+          [
+            {
+              "text": "Growing",
+              "color": "orange"
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": [
+        {
+          "text": "Code"
+        }
+      ],
+      "anchor": "code"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {\n  for (let i = 1; ; i++) {\n    try {\n      return await fn();\n    } catch (error) {\n      if (i >= attempts) throw error;\n      await new Promise((r) => setTimeout(r, 2 ** i * 100));\n    }\n  }\n}",
+      "caption": [
+        {
+          "text": "Captions work on code blocks too."
+        }
+      ]
+    },
+    {
+      "type": "quote",
+      "text": [
+        {
+          "text": "The best way to learn a system is to deploy it somewhere it wasn’t designed for."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": [
+        {
+          "text": "Toggles and columns"
+        }
+      ],
+      "anchor": "toggles-and-columns"
+    },
+    {
+      "type": "toggle",
+      "summary": [
+        {
+          "text": "Click to expand a toggle"
+        }
+      ],
+      "children": [
+        {
+          "type": "paragraph",
+          "text": [
+            {
+              "text": "Hidden detail, perfect for long logs or optional deep-dives."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "columns",
+      "columns": [
+        [
+          {
+            "type": "heading",
+            "level": 4,
+            "text": [
+              {
+                "text": "Before"
+              }
+            ],
+            "anchor": "before"
+          },
+          {
+            "type": "paragraph",
+            "text": [
+              {
+                "text": "Manual CSV exports every Monday."
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "type": "heading",
+            "level": 4,
+            "text": [
+              {
+                "text": "After"
+              }
+            ],
+            "anchor": "after"
+          },
+          {
+            "type": "paragraph",
+            "text": [
+              {
+                "text": "A scheduled sync with alerts on failure."
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": [
+        {
+          "text": "Embeds and links"
+        }
+      ],
+      "anchor": "embeds-and-links"
+    },
+    {
+      "type": "bookmark",
+      "url": "https://github.com/zahra-hasan",
+      "caption": [
+        {
+          "text": "Links become cards. YouTube, Loom, Figma, CodePen and similar links embed inline as players."
+        }
+      ]
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "paragraph",
+      "text": [
+        {
+          "text": "That’s the tour.",
+          "italic": true
+        }
+      ]
+    }
+  ],
+  "kind": "post",
+  "slug": "everything-notion-can-do-here",
+  "icon": "🧩",
+  "title": "Sample post: everything Notion can do here",
+  "date": "2026-10-07"
+}

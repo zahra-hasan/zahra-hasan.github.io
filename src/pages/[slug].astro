@@ -1,0 +1,18 @@
+---
+// Any other standalone page from Notion (Type = Page), e.g. /uses/ or /now/.
+import Article from '../layouts/Article.astro';
+import { entriesOf } from '../lib/entries';
+import type { Entry } from '../lib/model';
+
+export async function getStaticPaths() {
+  // getStaticPaths can't see top-level variables, so this lives inside it.
+  const RESERVED = new Set(['about', 'writing', 'projects', 'tags', 'og', 'media', 'rss', '404']);
+  const pages = await entriesOf('page');
+  return pages
+    .filter((entry) => !RESERVED.has(entry.slug))
+    .map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props as { entry: Entry };
+---
+<Article entry={entry} />

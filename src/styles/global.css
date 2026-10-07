@@ -1,0 +1,187 @@
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+
+/* ---------------------------------------------------------------------------
+   Design tokens
+   ------------------------------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --surface-2: #f2f0eb;
+  --ink: #17161c;
+  --ink-2: #47454f;
+  --ink-3: #75727e;
+  --line: #e5e2da;
+  --line-strong: #d3cfc4;
+  --accent: #4338ca;
+  --accent-ink: #ffffff;
+  --accent-soft: #ecebfd;
+  --glow-1: #c7d2fe;
+  --glow-2: #fde68a;
+  --shadow: 0 1px 2px rgb(20 18 30 / 0.04), 0 8px 24px -12px rgb(20 18 30 / 0.12);
+  --shadow-hover: 0 2px 4px rgb(20 18 30 / 0.05), 0 16px 40px -16px rgb(20 18 30 / 0.22);
+
+  /* Notion colours (text / background) */
+  --n-gray: #6f6e69;    --n-gray-bg: #f1f1ef;
+  --n-brown: #8a5a3c;   --n-brown-bg: #f4eeee;
+  --n-orange: #c2560f;  --n-orange-bg: #fbecdd;
+  --n-yellow: #a67c00;  --n-yellow-bg: #fbf3db;
+  --n-green: #2f7d4f;   --n-green-bg: #edf3ec;
+  --n-blue: #2563a8;    --n-blue-bg: #e7f3f8;
+  --n-purple: #7c4dbd;  --n-purple-bg: #f6f3f9;
+  --n-pink: #b83a7c;    --n-pink-bg: #faf1f5;
+  --n-red: #c4372d;     --n-red-bg: #fdebec;
+  --n-default: inherit; --n-default-bg: var(--surface-2);
+
+  --radius: 14px;
+  --radius-sm: 8px;
+  --page: 1120px;
+  --prose: 700px;
+  --gutter: clamp(16px, 4vw, 32px);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0e0e12;
+  --surface: #16161c;
+  --surface-2: #1e1e26;
+  --ink: #f1f0f5;
+  --ink-2: #c4c2cd;
+  --ink-3: #8f8c99;
+  --line: #2a2a34;
+  --line-strong: #3a3a46;
+  --accent: #a5b4fc;
+  --accent-ink: #11111a;
+  --accent-soft: #23244a;
+  --glow-1: #312e81;
+  --glow-2: #5b3a0e;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -12px rgb(0 0 0 / 0.5);
+  --shadow-hover: 0 2px 4px rgb(0 0 0 / 0.3), 0 16px 40px -16px rgb(0 0 0 / 0.7);
+
+  --n-gray: #9b9a97;    --n-gray-bg: #2a2a2e;
+  --n-brown: #c19a7f;   --n-brown-bg: #3a2c25;
+  --n-orange: #f0a35e;  --n-orange-bg: #3d2b1c;
+  --n-yellow: #e7c75a;  --n-yellow-bg: #3a331c;
+  --n-green: #6fc28f;   --n-green-bg: #1f3326;
+  --n-blue: #6cb2ea;    --n-blue-bg: #1b2f3d;
+  --n-purple: #b99bea;  --n-purple-bg: #2d2540;
+  --n-pink: #ea8fbf;    --n-pink-bg: #3a2231;
+  --n-red: #f08a80;     --n-red-bg: #3d2223;
+}
+
+/* No-JS fallback: follow the OS setting. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --bg: #0e0e12; --surface: #16161c; --surface-2: #1e1e26;
+    --ink: #f1f0f5; --ink-2: #c4c2cd; --ink-3: #8f8c99;
+    --line: #2a2a34; --line-strong: #3a3a46;
+    --accent: #a5b4fc; --accent-ink: #11111a; --accent-soft: #23244a;
+    --glow-1: #312e81; --glow-2: #5b3a0e;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: 88px;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.65;
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+main { flex: 1; }
+
+img, video, iframe { max-width: 100%; }
+img { height: auto; }
+
+a { color: inherit; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); text-underline-offset: 3px; }
+a:hover { text-decoration-color: currentColor; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+::selection { background: var(--accent-soft); }
+
+h1, h2, h3, h4 { line-height: 1.2; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+p { text-wrap: pretty; }
+
+.container { width: 100%; max-width: var(--page); margin-inline: auto; padding-inline: var(--gutter); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 42px; padding: 0 18px;
+  border-radius: 999px;
+  font-size: 15px; font-weight: 550;
+  text-decoration: none;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.btn-primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.btn svg { width: 18px; height: 18px; flex: none; }
+
+/* Tags */
+.tags { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0; list-style: none; }
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+a.tag:hover { border-color: var(--line-strong); color: var(--ink); }
+
+/* Section headings */
+.section { padding-block: clamp(48px, 8vw, 88px); }
+.section-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 28px; }
+.section-head h2 { font-size: clamp(24px, 3vw, 30px); }
+.section-head a { font-size: 15px; color: var(--ink-2); white-space: nowrap; }
+
+/* Page header for index pages */
+.page-head { padding-top: clamp(40px, 7vw, 80px); padding-bottom: 16px; }
+.page-head h1 { font-size: clamp(36px, 6vw, 56px); letter-spacing: -0.035em; }
+.page-head p { color: var(--ink-2); max-width: 60ch; font-size: 18px; margin: 14px 0 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}

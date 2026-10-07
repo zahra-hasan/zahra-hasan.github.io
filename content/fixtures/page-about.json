@@ -1,0 +1,28 @@
+{
+  "summary": "Software engineer. CS & AI graduate from the University of Sheffield.",
+  "updated": "2026-10-07T12:00:00.000Z",
+  "tags": [],
+  "featured": false,
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": [
+        {
+          "text": "Sample About page — write yours in Notion as a page with Type = Page and Slug = about."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": [
+        {
+          "text": "I build production-grade web applications across frontend and backend, and I’m interested in scalable system design, cloud-native development and distributed systems."
+        }
+      ]
+    }
+  ],
+  "kind": "page",
+  "slug": "about",
+  "title": "About me",
+  "date": "2026-10-07"
+}

@@ -1,0 +1,23 @@
+{
+  "summary": "Placeholder for a reflective post — e.g. what you learned in your first month working directly with customers.",
+  "updated": "2026-10-07T12:00:00.000Z",
+  "tags": [
+    "Forward-deployed engineering",
+    "Learning"
+  ],
+  "featured": false,
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": [
+        {
+          "text": "Write about what surprised you, what you’d do differently, and one thing you’d tell someone starting out."
+        }
+      ]
+    }
+  ],
+  "kind": "post",
+  "slug": "sample-first-month",
+  "title": "Sample: what a journey post could look like",
+  "date": "2026-09-21"
+}

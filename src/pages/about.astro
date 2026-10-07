@@ -1,0 +1,44 @@
+---
+import '../styles/prose.css';
+import Base from '../layouts/Base.astro';
+import Article from '../layouts/Article.astro';
+import Timeline from '../components/Timeline.astro';
+import { site } from '../site.config';
+import { entriesOf, pageBySlug } from '../lib/entries';
+
+// Written in Notion as a page with Type = Page and Slug = about.
+const about = await pageBySlug('about');
+const milestones = await entriesOf('milestone');
+---
+{about ? (
+  <Article entry={about}>
+    {milestones.length > 0 && (
+      <section id="journey" class="journey">
+        <h2>The journey so far</h2>
+        <Timeline milestones={milestones} />
+      </section>
+    )}
+  </Article>
+) : (
+  <Base title="About">
+    <div class="container fallback">
+      <header class="page-head">
+        <p class="eyebrow">About</p>
+        <h1>{site.name}</h1>
+        <p>{site.intro}</p>
+      </header>
+      {milestones.length > 0 && (
+        <section id="journey" class="journey">
+          <h2>The journey so far</h2>
+          <Timeline milestones={milestones} />
+        </section>
+      )}
+    </div>
+  </Base>
+)}
+
+<style>
+  .fallback { max-width: calc(var(--prose) + 2 * var(--gutter)); }
+  .journey { max-width: var(--prose); margin: 64px auto 0; padding-top: 40px; border-top: 1px solid var(--line); scroll-margin-top: 88px; }
+  .journey h2 { font-size: 26px; margin-bottom: 28px; }
+</style>

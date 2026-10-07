@@ -1,0 +1,32 @@
+---
+import type { Entry } from '../lib/model';
+import { entryPath, tagPath } from '../lib/paths';
+import { formatDate, readingMinutes } from '../lib/entries';
+
+interface Props { entry: Entry }
+const { entry } = Astro.props;
+---
+<article class="post">
+  <div class="meta eyebrow">
+    <time datetime={entry.date}>{formatDate(entry.date)}</time>
+    <span aria-hidden="true">·</span>
+    <span>{readingMinutes(entry)} min read</span>
+  </div>
+  <h3><a href={entryPath(entry)}>{entry.icon && <span class="icon" aria-hidden="true">{entry.icon}</span>}{entry.title}</a></h3>
+  {entry.summary && <p>{entry.summary}</p>}
+  {entry.tags.length > 0 && (
+    <ul class="tags">{entry.tags.map((t) => <li><a class="tag" href={tagPath(t)}>{t}</a></li>)}</ul>
+  )}
+</article>
+
+<style>
+  .post { position: relative; padding: 24px 0; border-top: 1px solid var(--line); }
+  .meta { display: flex; gap: 8px; margin-bottom: 8px; font-size: 12px; }
+  h3 { font-size: 21px; letter-spacing: -0.015em; }
+  h3 a { text-decoration: none; }
+  h3 a::after { content: ''; position: absolute; inset: 0; }
+  h3 a:hover { color: var(--accent); }
+  .icon { margin-right: 8px; }
+  p { margin: 8px 0 0; color: var(--ink-2); max-width: 68ch; }
+  .tags { margin-top: 14px; position: relative; z-index: 1; }
+</style>

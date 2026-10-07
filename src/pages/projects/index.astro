@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { projectsForShowcase } from '../../lib/entries';
+
+const projects = await projectsForShowcase();
+---
+<Base title="Projects" description="Technical projects I’ve designed and built.">
+  <div class="container">
+    <header class="page-head">
+      <p class="eyebrow">Projects</p>
+      <h1>Things I’ve built</h1>
+      <p>A running collection of technical projects — what they do, how they work, and what I learned building them.</p>
+    </header>
+    {projects.length === 0
+      ? <p class="empty">Projects coming soon.</p>
+      : <div class="grid">{projects.map((p) => <ProjectCard entry={p} />)}</div>}
+  </div>
+</Base>
+
+<style>
+  .grid { margin-top: 32px; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 20px; }
+  .empty { color: var(--ink-3); margin-top: 32px; }
+</style>

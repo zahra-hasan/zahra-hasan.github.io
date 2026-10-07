@@ -1,0 +1,83 @@
+name: Sync from Notion & deploy
+
+on:
+  # Publishing from Notion: picked up by the schedule, or press "Run workflow" for an instant publish.
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write   # commit synced content + Markdown backups
+  pages: write
+  id-token: write
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      deploy: ${{ steps.decide.outputs.deploy }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm test
+
+      - name: Sync published pages from Notion
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+        run: npm run sync
+
+      - name: Commit synced content and Markdown backup
+        id: commit
+        run: |
+          git add content public/media
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -m "Sync content from Notion"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Scheduled runs only redeploy when something in Notion actually changed.
+      - name: Decide whether to deploy
+        id: decide
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ] || [ "${{ steps.commit.outputs.changed }}" = "true" ]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.decide.outputs.deploy == 'true'
+        run: npm run build
+
+      - if: steps.decide.outputs.deploy == 'true'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.deploy == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

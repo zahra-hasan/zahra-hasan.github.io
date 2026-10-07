@@ -1,0 +1,176 @@
+---
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+import { site } from '../site.config';
+import { EMBED_FRAME_ORIGINS } from '../lib/safe-url';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Key of the generated social image under /og/, e.g. "post-my-slug". */
+  ogImage?: string;
+  type?: 'website' | 'article';
+  publishedTime?: string;
+  modifiedTime?: string;
+}
+
+const { title, description = site.description, ogImage = 'home', type = 'website', publishedTime, modifiedTime } = Astro.props;
+const fullTitle = title ? `${title} · ${site.name}` : `${site.name} — ${site.role}`;
+const canonical = new URL(Astro.url.pathname, site.url).toString();
+const image = new URL(`/og/${ogImage}.png`, site.url).toString();
+
+// Strict policy: only our own scripts, no inline JS, iframes only from known players.
+const csp = [
+  "default-src 'self'",
+  "script-src 'self'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data:",
+  "font-src 'self'",
+  "media-src 'self'",
+  `frame-src ${EMBED_FRAME_ORIGINS.join(' ')}`,
+  "connect-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'none'",
+].join('; ');
+
+const nav = [
+  { href: '/writing/', label: 'Writing' },
+  { href: '/projects/', label: 'Projects' },
+  { href: '/about/', label: 'About' },
+];
+const current = Astro.url.pathname;
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {import.meta.env.PROD && <meta http-equiv="Content-Security-Policy" content={csp} />}
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title={`${site.name} — Writing`} href="/rss.xml" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#faf9f6" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e0e12" media="(prefers-color-scheme: dark)" />
+
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title ?? site.name} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="author" content={site.name} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script is:inline src="/theme.js"></script>
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="container bar">
+        <a class="brand" href="/" aria-label={`${site.name}, home`}>
+          <span class="mark" aria-hidden="true">ZH</span>
+          <span class="brand-name">{site.name}</span>
+        </a>
+        <nav aria-label="Main">
+          <ul>
+            {nav.map((item) => (
+              <li>
+                <a href={item.href} aria-current={current.startsWith(item.href) ? 'page' : undefined}>{item.label}</a>
+              </li>
+            ))}
+          </ul>
+          <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark mode">
+            <span class="sun"><Icon name="sun" /></span>
+            <span class="moon"><Icon name="moon" /></span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container foot">
+        <p>© {year} {site.name}</p>
+        <ul class="foot-links">
+          {site.links.linkedin && <li><a href={site.links.linkedin} rel="me noopener" target="_blank"><Icon name="linkedin" label="LinkedIn" /></a></li>}
+          {site.links.github && <li><a href={site.links.github} rel="me noopener" target="_blank"><Icon name="github" label="GitHub" /></a></li>}
+          {site.links.email && <li><a href={`mailto:${site.links.email}`}><Icon name="mail" label="Email" /></a></li>}
+          <li><a href="/rss.xml"><Icon name="rss" label="RSS feed" /></a></li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .skip {
+    position: absolute; left: 12px; top: -48px; z-index: 100;
+    background: var(--ink); color: var(--bg); padding: 8px 14px; border-radius: 8px;
+  }
+  .skip:focus { top: 12px; }
+
+  .site-header {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  }
+  .bar { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 12px; }
+
+  .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 650; letter-spacing: -0.01em; }
+  .mark {
+    display: grid; place-items: center;
+    width: 32px; height: 32px; border-radius: 9px;
+    background: var(--ink); color: var(--bg);
+    font-size: 12.5px; font-weight: 700; letter-spacing: 0.02em;
+  }
+
+  nav { display: flex; align-items: center; gap: 4px; }
+  nav ul { display: flex; gap: 2px; list-style: none; margin: 0; padding: 0; }
+  nav a {
+    display: block; padding: 6px 12px; border-radius: 999px;
+    font-size: 15px; color: var(--ink-2); text-decoration: none;
+  }
+  nav a:hover { color: var(--ink); background: var(--surface-2); }
+  nav a[aria-current='page'] { color: var(--ink); background: var(--surface-2); font-weight: 550; }
+
+  .theme-toggle {
+    display: grid; place-items: center;
+    width: 36px; height: 36px; margin-left: 4px;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: transparent; color: var(--ink-2); cursor: pointer;
+  }
+  .theme-toggle:hover { color: var(--ink); border-color: var(--line-strong); }
+  .theme-toggle :global(svg) { width: 17px; height: 17px; }
+  .theme-toggle .moon { display: none; }
+  :global([data-theme='dark']) .theme-toggle .sun { display: none; }
+  :global([data-theme='dark']) .theme-toggle .moon { display: block; }
+
+  @media (max-width: 560px) {
+    .brand-name { display: none; }
+    nav a { padding: 6px 10px; }
+  }
+
+  .site-footer { border-top: 1px solid var(--line); margin-top: 48px; }
+  .foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 28px; color: var(--ink-3); font-size: 14px; }
+  .foot p { margin: 0; }
+  .foot-links { display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; }
+  .foot-links a { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 999px; color: var(--ink-3); }
+  .foot-links a:hover { color: var(--ink); background: var(--surface-2); }
+  .foot-links :global(svg) { width: 18px; height: 18px; }
+</style>

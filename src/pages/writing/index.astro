@@ -1,0 +1,39 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostItem from '../../components/PostItem.astro';
+import { entriesOf, tagsWithCounts } from '../../lib/entries';
+import { tagPath } from '../../lib/paths';
+
+const posts = await entriesOf('post');
+const tags = await tagsWithCounts();
+const byYear = Map.groupBy(posts, (p) => p.date.slice(0, 4));
+---
+<Base title="Writing" description="Notes on software engineering, forward-deployed engineering, and what I’m learning along the way.">
+  <div class="container narrow">
+    <header class="page-head">
+      <p class="eyebrow">Writing</p>
+      <h1>Notes from the field</h1>
+      <p>Lessons, write-ups and reflections from my journey in software and forward-deployed engineering.</p>
+      {tags.length > 0 && (
+        <ul class="tags filter">{tags.map(({ tag, count }) => <li><a class="tag" href={tagPath(tag)}>{tag} <span>{count}</span></a></li>)}</ul>
+      )}
+    </header>
+
+    {posts.length === 0 && <p class="empty">Nothing published yet — check back soon.</p>}
+    {[...byYear].map(([year, items]) => (
+      <section class="year">
+        <h2 class="eyebrow">{year}</h2>
+        {items.map((p) => <PostItem entry={p} />)}
+      </section>
+    ))}
+  </div>
+</Base>
+
+<style>
+  .narrow { max-width: 860px; }
+  .filter { margin-top: 26px; }
+  .filter span { color: var(--ink-3); margin-left: 2px; }
+  .year { margin-top: 40px; }
+  .year h2 { margin-bottom: 4px; }
+  .empty { color: var(--ink-3); margin-top: 32px; }
+</style>

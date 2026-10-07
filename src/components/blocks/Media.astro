@@ -1,0 +1,69 @@
+---
+import type { Block } from '../../lib/model';
+import RichText from './RichText.astro';
+import Icon from '../Icon.astro';
+import { safeHref } from '../../lib/safe-url';
+
+type MediaBlock = Extract<Block, { type: 'image' | 'video' | 'embed' | 'bookmark' | 'file' }>;
+interface Props { block: MediaBlock }
+const { block } = Astro.props;
+
+const ratio: Record<string, string> = { spotify: '16 / 5', figma: '4 / 3', codepen: '4 / 3', codesandbox: '4 / 3', stackblitz: '4 / 3' };
+
+function bookmarkParts(url: string) {
+  if (url.startsWith('/')) return { host: 'On this site', path: url, external: false };
+  const u = new URL(url);
+  return { host: u.hostname.replace(/^www\./, ''), path: (u.pathname + u.search).replace(/\/$/, '') || '/', external: true };
+}
+const bookmarkHref = block.type === 'bookmark' ? safeHref(block.url) : undefined;
+const bm = bookmarkHref ? bookmarkParts(bookmarkHref) : undefined;
+---
+{block.type === 'image' && (
+  <figure class="n-figure">
+    <img src={block.src} alt={block.caption ? block.caption.map((t) => t.text).join('') : ''} loading="lazy" decoding="async" />
+    {block.caption && <figcaption><RichText text={block.caption} /></figcaption>}
+  </figure>
+)}
+{block.type === 'video' && (
+  <figure class="n-figure">
+    <video src={block.src} controls preload="metadata" playsinline></video>
+    {block.caption && <figcaption><RichText text={block.caption} /></figcaption>}
+  </figure>
+)}
+{block.type === 'embed' && (
+  <figure class="n-figure">
+    <div class="n-embed" style={`aspect-ratio: ${ratio[block.provider] ?? '16 / 9'}`}>
+      <iframe
+        src={block.src}
+        title={block.caption ? block.caption.map((t) => t.text).join('') : `${block.provider} embed`}
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allow="fullscreen; picture-in-picture; encrypted-media; clipboard-write"
+        sandbox="allow-scripts allow-same-origin allow-popups allow-presentation allow-forms"
+      ></iframe>
+    </div>
+    {block.caption && <figcaption><RichText text={block.caption} /></figcaption>}
+  </figure>
+)}
+{block.type === 'bookmark' && bm && (
+  <figure class="n-figure">
+    <a class="n-bookmark" href={bookmarkHref} target={bm.external ? '_blank' : undefined} rel={bm.external ? 'noopener noreferrer' : undefined}>
+      <span class="n-bookmark-icon"><Icon name="link" /></span>
+      <span class="n-bookmark-text">
+        <span class="n-bookmark-host">{bm.host}</span>
+        <span class="n-bookmark-path">{bm.path}</span>
+      </span>
+      {bm.external && <Icon name="external" />}
+    </a>
+    {block.caption && <figcaption><RichText text={block.caption} /></figcaption>}
+  </figure>
+)}
+{block.type === 'file' && (
+  <figure class="n-figure">
+    <a class="n-bookmark" href={block.src} download={block.name}>
+      <span class="n-bookmark-icon"><Icon name="file" /></span>
+      <span class="n-bookmark-text"><span class="n-bookmark-host">{block.name}</span></span>
+    </a>
+    {block.caption && <figcaption><RichText text={block.caption} /></figcaption>}
+  </figure>
+)}

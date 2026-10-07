@@ -1,0 +1,150 @@
+---
+// Renders a list of content blocks (see src/lib/model.ts). Recursive for nested
+// content such as toggles, callouts, columns and indented list items.
+import { Code } from 'astro:components';
+import { bundledLanguages } from 'shiki';
+import type { Block } from '../../lib/model';
+import RichText from './RichText.astro';
+import Media from './Media.astro';
+
+interface Props {
+  blocks: Block[];
+  /** Headings of the whole page, for table-of-contents blocks. */
+  headings?: { level: number; text: string; anchor: string }[];
+}
+const { blocks, headings = [] } = Astro.props;
+
+const codeLang = (lang: string) => (lang in bundledLanguages ? lang : 'text');
+---
+{blocks.map((block) => {
+  switch (block.type) {
+    case 'paragraph':
+      return (
+        <>
+          <p><RichText text={block.text} /></p>
+          {block.children && <div class="n-indent"><Astro.self blocks={block.children} headings={headings} /></div>}
+        </>
+      );
+
+    case 'heading': {
+      const H = `h${block.level}` as 'h2' | 'h3' | 'h4';
+      const heading = (
+        <H id={block.anchor} class="n-heading">
+          <RichText text={block.text} />
+          <a class="n-anchor" href={`#${block.anchor}`} aria-label="Link to this section">#</a>
+        </H>
+      );
+      return block.children
+        ? (
+          <details class="n-toggle n-toggle-heading">
+            <summary>{heading}</summary>
+            <div class="n-toggle-body"><Astro.self blocks={block.children} headings={headings} /></div>
+          </details>
+        )
+        : heading;
+    }
+
+    case 'bulleted_list':
+    case 'numbered_list':
+    case 'todo_list': {
+      const List = block.type === 'numbered_list' ? 'ol' : 'ul';
+      return (
+        <List class={block.type === 'todo_list' ? 'n-todo' : undefined}>
+          {block.items.map((item) => (
+            <li class={item.checked ? 'done' : undefined}>
+              {block.type === 'todo_list' && <span class="n-check" aria-label={item.checked ? 'Done' : 'Not done'} role="img"></span>}
+              <span><RichText text={item.text} /></span>
+              {item.children.length > 0 && <Astro.self blocks={item.children} headings={headings} />}
+            </li>
+          ))}
+        </List>
+      );
+    }
+
+    case 'quote':
+      return (
+        <blockquote>
+          <p><RichText text={block.text} /></p>
+          {block.children && <Astro.self blocks={block.children} headings={headings} />}
+        </blockquote>
+      );
+
+    case 'callout':
+      return (
+        <aside class={`n-callout bg-${block.color}`}>
+          {block.icon && <span class="n-callout-icon" aria-hidden="true">{block.icon}</span>}
+          <div class="n-callout-body">
+            {block.text.length > 0 && <p><RichText text={block.text} /></p>}
+            {block.children && <Astro.self blocks={block.children} headings={headings} />}
+          </div>
+        </aside>
+      );
+
+    case 'toggle':
+      return (
+        <details class="n-toggle">
+          <summary><RichText text={block.summary} /></summary>
+          <div class="n-toggle-body"><Astro.self blocks={block.children} headings={headings} /></div>
+        </details>
+      );
+
+    case 'code':
+      return (
+        <figure class="n-code">
+          {block.language !== 'text' && <span class="n-code-lang">{block.language}</span>}
+          <Code code={block.code} lang={codeLang(block.language) as any} themes={{ light: 'github-light', dark: 'github-dark' }} defaultColor={false} wrap={false} />
+          {block.caption && <figcaption><RichText text={block.caption} /></figcaption>}
+        </figure>
+      );
+
+    case 'divider':
+      return <hr />;
+
+    case 'equation':
+      return <div class="n-equation"><code>{block.expression}</code></div>;
+
+    case 'toc':
+      return headings.length > 0 && (
+        <nav class="n-toc" aria-label="On this page">
+          <ul>
+            {headings.map((h) => <li class={`lvl-${h.level}`}><a href={`#${h.anchor}`}>{h.text}</a></li>)}
+          </ul>
+        </nav>
+      );
+
+    case 'table':
+      return (
+        <div class="n-table-wrap" tabindex="0" role="region" aria-label="Table">
+          <table class="n-table">
+            {block.rows.map((row, r) => (
+              <tr>
+                {row.map((cell, c) => {
+                  const header = (block.columnHeader && r === 0) || (block.rowHeader && c === 0);
+                  return header
+                    ? <th scope={r === 0 && block.columnHeader ? 'col' : 'row'}><RichText text={cell} /></th>
+                    : <td><RichText text={cell} /></td>;
+                })}
+              </tr>
+            ))}
+          </table>
+        </div>
+      );
+
+    case 'columns':
+      return (
+        <div class="n-columns" style={`--cols: ${block.columns.length}`}>
+          {block.columns.map((column) => <div class="n-column"><Astro.self blocks={column} headings={headings} /></div>)}
+        </div>
+      );
+
+    case 'image':
+    case 'video':
+    case 'embed':
+    case 'bookmark':
+    case 'file':
+      return <Media block={block} />;
+
+    default:
+      return null;
+  }
+})}

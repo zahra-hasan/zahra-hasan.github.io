@@ -1,0 +1,83 @@
+---
+import '../styles/prose.css';
+import Base from './Base.astro';
+import Blocks from '../components/blocks/Blocks.astro';
+import Icon from '../components/Icon.astro';
+import type { Entry } from '../lib/model';
+import { formatDate, readingMinutes } from '../lib/entries';
+import { collectHeadings } from '../lib/headings';
+import { tagPath } from '../lib/paths';
+
+interface Props { entry: Entry; back?: { href: string; label: string } }
+const { entry, back } = Astro.props;
+const headings = collectHeadings(entry.blocks);
+const showUpdated = entry.updated.slice(0, 10) > entry.date;
+---
+<Base
+  title={entry.title}
+  description={entry.summary || undefined}
+  ogImage={`${entry.kind}-${entry.slug}`}
+  type={entry.kind === 'post' ? 'article' : 'website'}
+  publishedTime={entry.date}
+  modifiedTime={entry.updated}
+>
+  <article class="article container">
+    <header class="head">
+      {back && <a class="back" href={back.href}>← {back.label}</a>}
+      {entry.icon && <div class="icon" aria-hidden="true">{entry.icon}</div>}
+      <h1>{entry.title}</h1>
+      {entry.summary && <p class="lead">{entry.summary}</p>}
+      {entry.kind !== 'page' && (
+        <div class="meta">
+          <span class="eyebrow">
+            <time datetime={entry.date}>{formatDate(entry.date)}</time>
+            {entry.kind === 'post' && <> · {readingMinutes(entry)} min read</>}
+            {showUpdated && <> · Updated {formatDate(entry.updated)}</>}
+          </span>
+          {entry.tags.length > 0 && (
+            <ul class="tags">{entry.tags.map((t) => <li><a class="tag" href={tagPath(t)}>{t}</a></li>)}</ul>
+          )}
+        </div>
+      )}
+      {(entry.repoUrl || entry.liveUrl) && (
+        <div class="links">
+          {entry.liveUrl && <a class="btn btn-primary" href={entry.liveUrl} target="_blank" rel="noopener noreferrer">View live <Icon name="external" /></a>}
+          {entry.repoUrl && <a class="btn" href={entry.repoUrl} target="_blank" rel="noopener noreferrer"><Icon name="github" /> Source</a>}
+        </div>
+      )}
+    </header>
+
+    {entry.cover && <img class="cover" src={entry.cover} alt="" decoding="async" fetchpriority="high" />}
+
+    <div class="prose body">
+      <Blocks blocks={entry.blocks} headings={headings} />
+    </div>
+
+    <slot />
+
+    {back && (
+      <footer class="end">
+        <a class="btn" href={back.href}>← {back.label}</a>
+      </footer>
+    )}
+  </article>
+</Base>
+
+<style>
+  .article { --w: var(--prose); }
+  .head, .body, .end { max-width: var(--w); margin-inline: auto; }
+  .head { padding-top: clamp(32px, 6vw, 64px); }
+  .back { display: inline-block; margin-bottom: 28px; font-size: 15px; color: var(--ink-3); text-decoration: none; }
+  .back:hover { color: var(--ink); }
+  .icon { font-size: 52px; line-height: 1; margin-bottom: 18px; }
+  h1 { font-size: clamp(34px, 5.5vw, 50px); letter-spacing: -0.035em; line-height: 1.1; }
+  .lead { font-size: 20px; line-height: 1.55; color: var(--ink-2); margin: 18px 0 0; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 26px; padding-bottom: 26px; border-bottom: 1px solid var(--line); }
+  .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .cover {
+    display: block; width: 100%; max-width: 960px; margin: 36px auto 0;
+    aspect-ratio: 2 / 1; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--line);
+  }
+  .body { margin-top: 36px; }
+  .end { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--line); }
+</style>

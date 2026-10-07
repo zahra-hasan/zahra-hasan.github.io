@@ -1,0 +1,24 @@
+{
+  "summary": "Placeholder project — describe the problem, your role, the architecture, and the outcome.",
+  "updated": "2026-10-07T12:00:00.000Z",
+  "tags": [
+    "Python",
+    "APIs"
+  ],
+  "featured": false,
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": [
+        {
+          "text": "Project pages support everything posts do, plus links to the live demo and source code."
+        }
+      ]
+    }
+  ],
+  "kind": "project",
+  "slug": "sample-customer-integration",
+  "icon": "🔌",
+  "title": "Sample: customer data integration",
+  "date": "2026-07-15"
+}

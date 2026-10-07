@@ -1,0 +1,26 @@
+{
+  "summary": "A personal site where I write in Notion and publish to a fast, secure static site with Astro.",
+  "updated": "2026-10-07T12:00:00.000Z",
+  "tags": [
+    "Astro",
+    "TypeScript",
+    "Notion API"
+  ],
+  "featured": true,
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": [
+        {
+          "text": "Notion is the editor; a GitHub Action syncs published pages, downloads images, backs everything up as Markdown, and deploys a static site with no login surface."
+        }
+      ]
+    }
+  ],
+  "kind": "project",
+  "slug": "this-website",
+  "icon": "🌐",
+  "title": "This website",
+  "date": "2026-10-07",
+  "repoUrl": "https://github.com/zahra-hasan/zahra-hasan.github.io"
+}

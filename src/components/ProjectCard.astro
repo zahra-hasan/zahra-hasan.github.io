@@ -1,0 +1,56 @@
+---
+import type { Entry } from '../lib/model';
+import { entryPath } from '../lib/paths';
+
+interface Props { entry: Entry }
+const { entry } = Astro.props;
+
+// Projects without a cover get a deterministic gradient so the grid stays lively.
+const hue = [...entry.slug].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 360, 7);
+---
+<article class="card">
+  <div class="thumb" style={entry.cover ? undefined : `--h: ${hue}`}>
+    {entry.cover
+      ? <img src={entry.cover} alt="" loading="lazy" decoding="async" />
+      : <span class="glyph" aria-hidden="true">{entry.icon ?? entry.title.slice(0, 1)}</span>}
+  </div>
+  <div class="body">
+    <h3><a href={entryPath(entry)}>{entry.title}</a></h3>
+    {entry.summary && <p>{entry.summary}</p>}
+    {entry.tags.length > 0 && (
+      <ul class="tags">{entry.tags.slice(0, 4).map((t) => <li><span class="tag">{t}</span></li>)}</ul>
+    )}
+  </div>
+</article>
+
+<style>
+  .card {
+    position: relative; display: flex; flex-direction: column;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    overflow: hidden; box-shadow: var(--shadow);
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: var(--line-strong); }
+  .thumb {
+    aspect-ratio: 16 / 9; display: grid; place-items: center; overflow: hidden;
+    background:
+      radial-gradient(120% 120% at 0% 0%, hsl(var(--h) 85% 72% / 0.9), transparent 55%),
+      radial-gradient(120% 120% at 100% 100%, hsl(calc(var(--h) + 60) 80% 65% / 0.85), transparent 55%),
+      hsl(calc(var(--h) + 30) 40% 92%);
+    border-bottom: 1px solid var(--line);
+  }
+  :global([data-theme='dark']) .thumb {
+    background:
+      radial-gradient(120% 120% at 0% 0%, hsl(var(--h) 60% 35% / 0.9), transparent 55%),
+      radial-gradient(120% 120% at 100% 100%, hsl(calc(var(--h) + 60) 55% 30% / 0.85), transparent 55%),
+      hsl(calc(var(--h) + 30) 20% 14%);
+  }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .glyph { font-size: 44px; font-weight: 700; color: rgb(255 255 255 / 0.92); text-shadow: 0 2px 16px rgb(0 0 0 / 0.15); }
+  .body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  h3 { font-size: 19px; }
+  h3 a { text-decoration: none; }
+  h3 a::after { content: ''; position: absolute; inset: 0; }
+  p { margin: 0; color: var(--ink-2); font-size: 15.5px; line-height: 1.55; }
+  .tags { margin-top: auto; padding-top: 8px; }
+</style>

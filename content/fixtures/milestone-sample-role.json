@@ -1,0 +1,11 @@
+{
+  "summary": "Add milestones in Notion with Type = Milestone.",
+  "updated": "2026-10-07T12:00:00.000Z",
+  "tags": [],
+  "featured": false,
+  "blocks": [],
+  "kind": "milestone",
+  "slug": "sample-role",
+  "title": "Sample milestone: new role",
+  "date": "2026-06-01"
+}
