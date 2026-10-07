@@ -1,0 +1,118 @@
+{
+  "kind": "post",
+  "slug": "hello-from-notion",
+  "title": "Hello from Notion",
+  "summary": "My first post, written in Notion and published to my site.",
+  "date": "2026-10-07",
+  "updated": "2026-10-07T13:32:00.000Z",
+  "tags": [
+    "Meta"
+  ],
+  "featured": false,
+  "icon": "👋",
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": [
+        {
+          "text": "This page lives in Notion. Change Status to Published and it appears on the site after the next sync."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "icon": "💡",
+      "color": "blue",
+      "text": [
+        {
+          "text": "Callouts, toggles, tables, code, images and embeds all carry over."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": [
+        {
+          "text": "A heading"
+        }
+      ],
+      "anchor": "a-heading"
+    },
+    {
+      "type": "bulleted_list",
+      "items": [
+        {
+          "text": [
+            {
+              "text": "Bullet lists"
+            }
+          ],
+          "children": []
+        },
+        {
+          "text": [
+            {
+              "text": "with several items"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "const greeting: string = \"hello\";\nconsole.log(greeting);"
+    },
+    {
+      "type": "table",
+      "columnHeader": true,
+      "rowHeader": false,
+      "rows": [
+        [
+          [
+            {
+              "text": "Skill"
+            }
+          ],
+          [
+            {
+              "text": "Level"
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "text": "TypeScript"
+            }
+          ],
+          [
+            {
+              "text": "Daily driver"
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "type": "toggle",
+      "summary": [
+        {
+          "text": "Click to expand"
+        }
+      ],
+      "children": [
+        {
+          "type": "paragraph",
+          "text": [
+            {
+              "text": "Hidden details go here."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
